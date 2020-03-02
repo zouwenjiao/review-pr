@@ -5,6 +5,9 @@ output: github_document
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(tidyr)
+library(knitr)
 ```
 
 ## Most accomplished
@@ -12,9 +15,22 @@ knitr::opts_chunk$set(echo = FALSE)
 Below we look at which 5 characters from Star Wars are the most accomplished pilot (flew the fewest number of starships):
 
 ```{r table-of-most-accomplished-pilots}
+accomp_pilots <- starwars %>% 
+  unnest(films) %>% 
+  group_by(name) %>% 
+  tally() %>% 
+  arrange(desc(n)) %>% 
+  head(10)
+
+kable(accomp_pilots,
+  col.names = c("Character", "Number of Starships piloted"))
 ```
 
-By far, the most accomplished pilot of all is ????. He is shown below piloting a starship.
+By far, the most accomplished pilot of all is `r accomp_pilots$name[1]`. He is shown below piloting a starship.
 
 ```{r top-pilot, fig.cap="Most accomplished Star Wars pilot.", out.width = "100%"}
+include_graphics("https://starwarz.com/tbone/wp-content/uploads/2011/08/331.jpg",
+                 )
 ```
+
+*Source: <https://starwarz.com>*
